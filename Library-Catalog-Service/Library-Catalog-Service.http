@@ -1,6 +1,34 @@
-@Library_Catalog_Service_HostAddress = http://localhost:5188
+@baseUrl = http://localhost:5188
 
-GET {{Library_Catalog_Service_HostAddress}}/weatherforecast/
+### Skapa kategori
+POST {{baseUrl}}/api/itemtypes
+Content-Type: application/json
+
+{
+  "name": "Book"
+}
+
+###
+
+### Hämta alla kategorier
+GET {{baseUrl}}/api/itemtypes
 Accept: application/json
 
 ###
+
+### Skapa item
+POST {{baseUrl}}/api/items
+Content-Type: application/json
+
+{
+  "title": "Clean Code",
+  "description": "Programming book",
+  "itemTypeId": 1,
+  "isActive": true
+}
+
+###
+
+### Hämta alla items
+GET {{baseUrl}}/api/items
+Accept: application/json

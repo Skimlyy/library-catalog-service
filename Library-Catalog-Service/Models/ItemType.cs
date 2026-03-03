@@ -1,4 +1,6 @@
-﻿namespace Library_Catalog_Service.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace Library_Catalog_Service.Models;
 
 public class ItemType
 {
