@@ -25,6 +25,9 @@ namespace Library_Catalog_Service.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Identifier")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
@@ -36,6 +39,9 @@ namespace Library_Catalog_Service.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Identifier")
+                        .IsUnique();
 
                     b.HasIndex("ItemTypeId");
 
@@ -53,6 +59,9 @@ namespace Library_Catalog_Service.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("ItemTypes");
                 });

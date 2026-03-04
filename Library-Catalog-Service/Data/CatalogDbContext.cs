@@ -9,4 +9,17 @@ public class CatalogDbContext : DbContext
 
     public DbSet<Item> Items => Set<Item>();
     public DbSet<ItemType> ItemTypes => Set<ItemType>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ItemType>()
+            .HasIndex(x => x.Name)
+            .IsUnique();
+
+        modelBuilder.Entity<Item>()
+            .HasIndex(x => x.Identifier)
+            .IsUnique();
+
+        base.OnModelCreating(modelBuilder);
+    }
 }

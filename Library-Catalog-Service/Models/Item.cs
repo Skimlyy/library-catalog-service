@@ -7,6 +7,8 @@ public class Item
     public string Title { get; set; } = "";
     public string? Description { get; set; }
 
+    public string? Identifier { get; set; }  // ISBN eller inventarienummer
+
     public bool IsActive { get; set; } = true;
 
     public int ItemTypeId { get; set; }
