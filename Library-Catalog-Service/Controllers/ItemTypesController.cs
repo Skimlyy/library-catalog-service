@@ -30,8 +30,21 @@ public class ItemTypesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ItemType>> Create(ItemType itemType)
     {
+        // Enkel validering
+        var name = itemType.Name?.Trim();
+        if (string.IsNullOrWhiteSpace(name))
+            return BadRequest("Name är obligatoriskt.");
+
+        // Dublett-koll (case-insensitive)
+        var exists = await _db.ItemTypes.AnyAsync(x => x.Name.ToLower() == name.ToLower());
+        if (exists)
+            return Conflict("ItemType med detta namn finns redan.");
+
+        itemType.Name = name;
+
         _db.ItemTypes.Add(itemType);
         await _db.SaveChangesAsync();
+
         return CreatedAtAction(nameof(GetById), new { id = itemType.Id }, itemType);
     }
 
