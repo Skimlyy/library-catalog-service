@@ -30,15 +30,17 @@ public class ItemTypesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ItemType>> Create(ItemType itemType)
     {
-        // Enkel validering
         var name = itemType.Name?.Trim();
         if (string.IsNullOrWhiteSpace(name))
-            return BadRequest("Name är obligatoriskt.");
+            return BadRequest("Namn är obligatoriskt.");
 
-        // Dublett-koll (case-insensitive)
-        var exists = await _db.ItemTypes.AnyAsync(x => x.Name.ToLower() == name.ToLower());
-        if (exists)
-            return Conflict("ItemType med detta namn finns redan.");
+        // Dublettskydd (case-insensitive)
+        var existing = await _db.ItemTypes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Name.ToLower() == name.ToLower());
+
+        if (existing != null)
+            return Conflict($"Kategorin '{existing.Name}' finns redan (Id: {existing.Id}).");
 
         itemType.Name = name;
 
@@ -53,11 +55,26 @@ public class ItemTypesController : ControllerBase
     {
         if (id != itemType.Id) return BadRequest("Id i URL matchar inte objektet.");
 
+        var name = itemType.Name?.Trim();
+        if (string.IsNullOrWhiteSpace(name))
+            return BadRequest("Name är obligatoriskt.");
+
         var exists = await _db.ItemTypes.AnyAsync(x => x.Id == id);
         if (!exists) return NotFound();
 
+        // Dublettskydd (case-insensitive) för andra rader
+        var duplicate = await _db.ItemTypes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id != id && x.Name.ToLower() == name.ToLower());
+
+        if (duplicate != null)
+            return Conflict($"Kategorin '{duplicate.Name}' finns redan (Id: {duplicate.Id}).");
+
+        itemType.Name = name;
+
         _db.Entry(itemType).State = EntityState.Modified;
         await _db.SaveChangesAsync();
+
         return NoContent();
     }
 
