@@ -7,5 +7,6 @@ public class ItemType
     public int Id { get; set; }
     public string Name { get; set; } = "";
 
+    [JsonIgnore]
     public List<Item> Items { get; set; } = new();
 }
