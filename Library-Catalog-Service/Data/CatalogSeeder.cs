@@ -13,7 +13,6 @@ public static class CatalogSeeder
         {
             db.ItemTypes.AddRange(
                 new ItemType { Name = "Bok" },
-                new ItemType { Name = "Tidning" },
                 new ItemType { Name = "Utrustning" }
             );
 
