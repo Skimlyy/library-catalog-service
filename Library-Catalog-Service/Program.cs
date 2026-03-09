@@ -1,15 +1,10 @@
 using Library_Catalog_Service.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Controllers + JSON (fixar loopar)
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    });
+// Controllers
+builder.Services.AddControllers();
 
 // OpenAPI
 builder.Services.AddOpenApi();
@@ -19,6 +14,13 @@ builder.Services.AddDbContext<CatalogDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("CatalogDb")));
 
 var app = builder.Build();
+
+// Seed
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<CatalogDbContext>();
+    await CatalogSeeder.SeedAsync(db);
+}
 
 if (app.Environment.IsDevelopment())
 {
