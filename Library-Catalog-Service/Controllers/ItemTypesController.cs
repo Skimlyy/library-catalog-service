@@ -62,7 +62,7 @@ public class ItemTypesController : ControllerBase
         var exists = await _db.ItemTypes.AnyAsync(x => x.Id == id);
         if (!exists) return NotFound();
 
-        // Dublettskydd (case-insensitive) för andra rader
+        // Dublettskydd (case-insensitive)
         var duplicate = await _db.ItemTypes
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id != id && x.Name.ToLower() == name.ToLower());
