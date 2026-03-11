@@ -1,9 +1,42 @@
 @baseUrl = http://localhost:5188
+### Skapa ny kategori
+POST {{baseUrl}}/api/itemtypes
+Content-Type: application/json
 
+{
+  "name": "Bok"
+}
 ### Hämta alla kategorier
 GET {{baseUrl}}/api/itemtypes
 Accept: application/json
 
+### Skapa nytt item
+POST {{baseUrl}}/api/items
+Content-Type: application/json
+
+{
+  "title": "Clean Code",
+  "description": "Programmeringsbok",
+  "identifier": "9780132350884",
+  "itemTypeId": 1
+}
+
+### Uppdatera Item
+PUT {{baseUrl}}/api/items/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "Clean Code Updated",
+  "description": "Uppdaterad bok",
+  "identifier": "9780132350884",
+  "isActive": true,
+  "itemTypeId": 1
+}
+
 ### Hämta alla items
 GET {{baseUrl}}/api/items
 Accept: application/json
+
+###
+DELETE {{baseUrl}}/api/items/1
