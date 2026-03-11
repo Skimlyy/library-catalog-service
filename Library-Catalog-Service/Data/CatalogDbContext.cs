@@ -19,6 +19,12 @@ public class CatalogDbContext : DbContext
         modelBuilder.Entity<Item>()
             .HasIndex(x => x.Identifier)
             .IsUnique();
+        
+        modelBuilder.Entity<Item>()
+            .HasOne(x => x.ItemType)
+            .WithMany(x => x.Items)
+            .HasForeignKey(i => i.ItemTypeId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         base.OnModelCreating(modelBuilder);
     }

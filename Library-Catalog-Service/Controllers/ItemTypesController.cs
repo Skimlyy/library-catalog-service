@@ -81,11 +81,16 @@ public class ItemTypesController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var itemType = await _db.ItemTypes.FindAsync(id);
-        if (itemType is null) return NotFound();
+      var itemType = await _db.ItemTypes.FindAsync(id);
+      if (itemType is null) return NotFound();
 
-        _db.ItemTypes.Remove(itemType);
-        await _db.SaveChangesAsync();
-        return NoContent();
+      var hasItems = await _db.Items.AnyAsync(x => x.ItemTypeId == id);
+      if (hasItems)
+          return Conflict("Kan inte ta bort kategori som används av ett eller flera items.");
+
+      _db.ItemTypes.Remove(itemType);
+      await _db.SaveChangesAsync();
+      
+      return NoContent();
     }
 }
