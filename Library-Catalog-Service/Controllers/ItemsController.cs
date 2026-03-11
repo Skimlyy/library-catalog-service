@@ -64,6 +64,10 @@ public class ItemsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ItemDto>> Create(Item item)
     {
+        if (string.IsNullOrWhiteSpace(item.Title))
+            return BadRequest("Titel är obligatoriskt.");
+        item.Title = item.Title.Trim();
+        
         var typeExists = await _db.ItemTypes.AnyAsync(x => x.Id == item.ItemTypeId);
         if (!typeExists) return BadRequest("ItemTypeId finns inte.");
 
@@ -116,6 +120,9 @@ public class ItemsController : ControllerBase
     public async Task<IActionResult> Update(int id, Item item)
     {
         if (id != item.Id) return BadRequest("Id i URL matchar inte objektet.");
+        
+        if (string.IsNullOrWhiteSpace(item.Title))
+            return BadRequest("Titel är obligatoriskt.");
 
         var exists = await _db.Items.AnyAsync(x => x.Id == id);
         if (!exists) return NotFound();
