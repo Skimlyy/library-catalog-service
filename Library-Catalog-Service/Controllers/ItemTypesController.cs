@@ -2,6 +2,7 @@
 using Library_Catalog_Service.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Library_Catalog_Service.Security;
 
 namespace Library_Catalog_Service.Controllers;
 
@@ -28,6 +29,7 @@ public class ItemTypesController : ControllerBase
     }
 
     [HttpPost]
+    [ServiceFilter(typeof(ApiKeyFilter))]
     public async Task<ActionResult<ItemType>> Create(ItemType itemType)
     {
         var name = itemType.Name?.Trim();
@@ -51,6 +53,7 @@ public class ItemTypesController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [ServiceFilter(typeof(ApiKeyFilter))]
     public async Task<IActionResult> Update(int id, ItemType itemType)
     {
         if (id != itemType.Id) return BadRequest("Id i URL matchar inte objektet.");
@@ -79,6 +82,7 @@ public class ItemTypesController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [ServiceFilter(typeof(ApiKeyFilter))]
     public async Task<IActionResult> Delete(int id)
     {
       var itemType = await _db.ItemTypes.FindAsync(id);

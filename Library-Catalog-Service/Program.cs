@@ -1,10 +1,12 @@
 using Library_Catalog_Service.Data;
 using Microsoft.EntityFrameworkCore;
+using Library_Catalog_Service.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Controllers
 builder.Services.AddControllers();
+builder.Services.AddScoped<ApiKeyFilter>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
