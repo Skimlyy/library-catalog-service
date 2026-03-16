@@ -62,7 +62,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ItemDto>> Create(Item item)
+    public async Task<ActionResult<ItemDto>> Create([FromBody]Item item)
     {
         if (string.IsNullOrWhiteSpace(item.Title))
             return BadRequest("Titel är obligatoriskt.");
@@ -117,7 +117,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, Item item)
+    public async Task<IActionResult> Update(int id, [FromBody]Item item)
     {
         if (id != item.Id) return BadRequest("Id i URL matchar inte objektet.");
         
