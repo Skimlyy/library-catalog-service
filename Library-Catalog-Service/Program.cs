@@ -16,6 +16,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<CatalogDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("CatalogDb")));
 
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 // Database migrate + Seed
@@ -29,6 +40,7 @@ using (var scope = app.Services.CreateScope())
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseCors();
 app.UseAuthorization();
 
 app.MapControllers();
